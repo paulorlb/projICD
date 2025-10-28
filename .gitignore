@@ -1,0 +1,4 @@
+*.env
+/data
+/notebooks/teaching_materials
+/logs

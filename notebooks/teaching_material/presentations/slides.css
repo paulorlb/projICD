@@ -1,0 +1,13 @@
+/* Slightly shrink dense slides */
+.reveal .slides section.smaller { font-size: 0.9em; }
+
+/* Handy scroll container for tall content */
+.reveal .slides section .scroll {
+  max-height: 70vh;
+  overflow: auto;
+  padding-right: 0.5rem;
+}
+
+/* Keep large tables from spilling horizontally */
+.reveal table { width: 100%; table-layout: auto; }
+.reveal pre code { white-space: pre-wrap; }

@@ -1,0 +1,460 @@
+---
+title: "Networks & Graphs in the Social Sciences"
+author: "Master in Data Science for the Social Sciences"
+date: 2025-10-06
+format:
+  revealjs:
+    css: slides.css
+    theme: dark
+    center: false        # top-align content so it uses the full height
+    margin: 0.04         # less slide margin = more usable area (default ~0.1)
+    scrollable: true     # allow vertical scrolling if a slide still overflows
+    code-overflow: wrap  # wrap long code lines (no horizontal overflow
+    slide-number: true
+    incremental: true
+    navigation-mode: linear
+    transition: fade
+    toc: false
+    code-fold: false
+    embed-resources: true
+    mermaid: {}        # must be an object, not true/false
+execute:
+  echo: false          # execute.* must be nested under execute:
+  warning: false
+  message: false
+editor: visual
+---
+
+::: center
+# 🧠 Networks & Graphs in the Social Sciences
+
+### From Relationships to Structures
+:::
+
+---
+
+## Learning Goals
+
+-   Understand what a **network/graph** is and what it represents.
+-   Appreciate why networks matter for **social** and **bibliometric** analysis.
+-   Learn core **vocabulary** (nodes, edges, degree, path, components).
+-   See examples that connect **people, papers, and concepts**.
+
+
+---
+
+## What is a Network (Graph)?
+
+A **network** (graph) is a set of **nodes** (entities) connected by **edges** (relationships).
+
+::::: columns
+::: {.column width="50%"}
+**Mathematical view**
+
+$G = (V, E)$, with nodes $V$ and edges $E \subseteq V \times V$.
+:::
+
+::: {.column width="50%"}
+**Visual intuition**
+
+```{mermaid}
+graph TD
+  A((A)) --- B((B))
+  A --- C((C))
+  C --- D((D))
+  E((E)) --- F((F))
+  classDef hub fill:#5ec1ff,stroke:#0a74b7,color:#0a2a43;
+  class C hub;
+```
+
+*Two components; C plays a local hub role.*
+:::
+:::::
+
+---
+
+| Element |  Symbol  | Description                 | Example                 |
+|---------|:--------:|-----------------------------|-------------------------|
+| Node    |  $v_i$   | Entity/actor                | Author, paper, org      |
+| Edge    | $e_{ij}$ | Relation between $v_i, v_j$ | Co-authorship, citation |
+| Graph   |   $G$    | System (V,E)                | Collaboration network   |
+
+---
+
+## Why Networks for Social Science?
+
+::::: columns
+::: {.column width="50%"}
+**Limits of independent-observation thinking**
+
+-   Many phenomena are **interdependent** (influence, diffusion).
+-   Attributes alone miss **relational mechanisms**.
+-   Policies and behaviors spread via **ties**.
+:::
+
+::: {.column width="50%"}
+**Network lens enables**
+
+-   Identify **central actors** and **influencers**.
+-   Detect **communities** and **cleavages**.
+-   Study **flows** (information, resources, credit).
+-   Link **micro ties** to **macro structure**.
+:::
+:::::
+
+> **Tip:** Sketch your last 3 collaborations and think how that shapes access to ideas/data.
+
+---
+
+
+## Two Traditions of Network Thinking
+::: smaller
+| Tradition | Focus | Example Questions | Typical Data |
+|------------------|------------------|-------------------|------------------|
+| **Social Network Analysis (SNA)** | Relations among people/orgs | Who collaborates or brokers? Who is excluded? | Surveys, emails, co-authorships |
+| **Bibliometric & Information Networks** | Relations among papers/authors/ideas | Which works are co-cited? What are topic clusters? | Scopus/WoS citations, keywords |
+:::
+
+
+---
+
+
+## Networks as Models of Scientific Knowledge
+::: smaller
+Three complementary structures:
+
+| Structure | Units | Links | Interpretation |
+|------------------|------------------|------------------|-------------------|
+| **Social** | Authors, institutions | Co-authorship | Collaboration patterns |
+| **Intellectual** | Papers, references | Citations/co-citations | Knowledge flow & lineage |
+| **Conceptual** | Keywords, topics | Co-occurrence | Thematic proximity |
+
+---
+
+```{mermaid}
+graph LR
+  subgraph Social[Social]
+    S1[Author] --- S2[Author]
+  end
+  subgraph Intellectual[Intellectual]
+    I1[Paper] --> I2[Paper]
+    I3[Paper] -.co-cited.- I2
+  end
+  subgraph Conceptual[Conceptual]
+    K1[(Keyword)] --- K2[(Keyword)]
+  end
+  S1 -.writes.-> I1
+  I2 -.has.-> K1
+```
+:::
+
+---
+
+## Vocabulary by Example
+
+::::: columns
+::: {.column width="45%"}
+**Mini network**
+
+```{mermaid}
+graph TD
+  A((A)) --- B((B))
+  B --- C((C))
+  C --- D((D))
+  D --- A
+  G((G))
+```
+:::
+
+::: {.column width="55%"}
+Terms
+
+Degree of A: number of its edges.
+
+Path A→C: A–B–C (length 2).
+
+Cycle: A–B–C–D–A.
+
+Component: {A,B,C,D} and {G}.
+
+Density: realized edges / possible edges.
+:::
+:::::
+
+---
+
+## From Points to Relations
+
+
+**Relational system** (edges matter)
+
+```{mermaid}
+graph TD
+  A(( )) --- B(( ))
+  B --- C(( ))
+  C --- D(( ))
+  B --- E(( ))
+  A --- F(( ))
+```
+
+Structure reveals hubs, peripheries, bridges.
+
+
+---
+
+## Adjacency Matrix (Abstraction)
+
+Same graph, two encodings:
+
+::::: columns
+::: {.column width="50%"}
+```{mermaid}
+graph TD
+  A((A)) --- B((B))
+  A --- C((C))
+  B --- D((D))
+  C --- D
+```
+:::
+
+::: {.column width="50%"}
+|       |  A  |  B  |  C  |  D  |
+|-------|:---:|:---:|:---:|:---:|
+| **A** |  0  |  1  |  1  |  0  |
+| **B** |  1  |  0  |  0  |  1  |
+| **C** |  1  |  0  |  0  |  1  |
+| **D** |  0  |  1  |  1  |  0  |
+
+Adjacency matrix $A_{ij}=1$ if i connected to j.
+:::
+:::::
+
+---
+
+## Questions and Networks Analysis as a tool to answer them...
+
+:::: smaller
+| Level | Typical Questions | Bibliometric Example |
+|------------------|--------------------------|----------------------------|
+| **Node** | Who is central/influential? Who bridges groups? | Prolific authors vs. interdisciplinarity connectors |
+| **Group** | What communities exist? How cohesive? | Topic clusters / schools of thought |
+| **Global** | Dense or fragmented? How evolving? | Field consolidation over time |
+
+::: callout-warning
+**Caution:** Layouts are *aesthetic approximations*—distance on a slide is not a metric; filter/weight dense networks for readability.
+:::
+::::
+
+---
+
+## Quick Glossary
+
+-   **Node (vertex):** entity in the network.
+-   **Edge (link):** relation between entities.
+-   **Degree:** number of edges of a node.
+-   **Path / geodesic:** shortest route between nodes.
+-   **Component:** maximally connected subgraph.
+-   **Density:** realized / possible edges.
+
+---
+
+## Important notes:
+
+-   Networks model **relationships**; relationships generate **structure**.
+-   Social & bibliometric networks ask parallel questions with different units.
+-   Vocabulary + abstraction (adjacency) let us **measure** and **visualize**.
+-   This foundation enables the next sections: **graph types**, **metrics**, **communities**.
+
+---
+
+
+## Map bibliometric data to graphs
+
+- **Undirected** vs **Directed**
+- **Weighted** vs **Unweighted**
+- **Bipartite** (two-mode) graphs
+- Typical projections: **Author–Paper → Author–Author**, **Paper–Keyword → Keyword–Keyword**
+
+---
+
+::: {.columns}
+**Cheat table**
+
+| Network | Nodes | Edge | Directed? | Weight? | Typical Use |
+|---|---|---|:---:|:---:|---|
+| Co-authorship | Authors | Wrote together | ✗ | ✓ | Collaboration structure |
+| Citation | Papers | A cites B | ✓ | ✓ | Knowledge flow |
+| Co-citation | Papers | C cites A & B together | ✗ | ✓ | Intellectual proximity |
+| Bibliographic coupling | Papers | Share references | ✗ | ✓ | Topical similarity |
+| Keyword co-occurrence | Keywords | Appear together | ✗ | ✓ | Concept map |
+| Institution collaboration | Orgs | Joint papers by members | ✗ | ✓ | Inter-org networks |
+:::
+
+---
+
+**Overview**
+
+```{mermaid}
+graph LR
+  subgraph BIPARTITE[Two-mode]
+    A1[Author] --- P1[Paper]
+    A2[Author] --- P1
+    P1 --- K1[(Keyword)]
+    P2[Paper] --- K1
+    P2 --- K2[(Keyword)]
+  end
+  subgraph PROJECTIONS[Projections]
+    A1a[Author] --- A2a[Author]
+    K1a[(Keyword)] --- K2a[(Keyword)]
+  end
+  BIPARTITE --> PROJECTIONS
+```
+
+
+---
+
+## Choosing graph type wisely
+
+::: {.columns}
+::: {.column width="50%"}
+**When to use directed**
+- Citation, retweets, hyperlinks
+- Causal/temporal interpretation
+- Path-based measures make sense
+:::
+
+::: {.column width="50%"}
+**When to keep bipartite**
+- Preserve affiliation structure
+- Avoid projection artifacts (inflated cliques)
+- Later: use weighted projections or null models
+:::
+:::
+
+> **Tip:** For dense co-occurrence, filter edges by weight threshold (e.g., ≥2) to improve readability.
+
+---
+
+## Global structure metrics
+
+::: {.columns}
+::: {.column width="50%"}
+**Density**
+- Realized edges / possible edges
+- High in small teams; low in broad fields
+
+**Components**
+- Disconnected subgraphs → isolated streams
+
+**Average path length**
+- Typical steps to connect two nodes
+:::
+
+::: {.column width="50%"}
+**Clustering coefficient**
+- Triadic closure tendency (team/clique tendency)
+
+**Assortativity**
+- Like-with-like mixing (e.g., institution, country)
+
+**Degree distribution**
+- Skewness → hubs vs egalitarian networks
+:::
+:::
+
+---
+
+## Node-level centralities (interpretation table)
+
+| Measure | Intuition | Bibliometric meaning | Caveats |
+|---|---|---|---|
+| Degree | Number of ties | Collaboration/citation breadth | Sensitive to sampling & name variants |
+| Strength | Sum of weights | Intensity of ties | Weights depend on preprocessing |
+| Betweenness | Shortest-path brokerage | Interdisciplinary connectors, bridges | Can be unstable in dense graphs |
+| Closeness | Average distance to all | Accessibility/reach to others | Not defined in disconnected graphs |
+| Eigenvector | Connected to the important | Prestige/influential neighborhoods | Favors well-connected cores |
+| PageRank | Random-surfer prestige | Influential papers in citation nets | Damped by parameter choice |
+
+---
+
+## Communities & meso-structure
+
+- **Goal:** find densely connected subgroups (topics, schools).
+- Algorithms: **Louvain**, **Leiden** (modularity); **Infomap** (flows); **Girvan–Newman** (edge betweenness).
+- Output: community id per node (use for color in plots; summarize by top keywords/authors).
+
+---
+
+## Robustness & validation
+
+- **Sensitivity** to preprocessing (author disambiguation, keyword normalization)
+- **Null models**: compare to random graphs preserving degree/strength
+- **Stability checks**: rerun communities with different seeds/algorithms
+- **Temporal slices**: see if clusters persist over years
+
+---
+
+## Visual Representation & Interpretation
+
+### Core visualization principles
+
+1. **Encode meaning**: size → centrality, color → community, edge width → weight
+2. **Use readable layouts**: force-directed for discovery; circular/arc for order
+3. **Filter for clarity**: threshold low-weight edges; show top-N nodes by metric
+4. **Label sparingly**: annotate hubs/bridges; add legends
+5. **Avoid misreadings**: layout distance ≠ metric distance
+
+---
+
+## Layouts at a glance
+
+::: {.columns}
+::: {.column width="50%"}
+**Force-directed** (Fruchterman–Reingold / ForceAtlas2)
+
+```{mermaid}
+graph TD
+  A---B;A---C;A---D;B---C;C---E;D---E;E---F;F---G;G---H;H---E
+```
+- Good for cluster emergence
+- Unstable w.r.t random seeds; not geographic
+:::
+
+::: {.column width="50%"}
+**Circular / Arc diagrams**
+
+```{mermaid}
+flowchart LR
+  A((A)) --- B((B))
+  B --- C((C))
+  C --- D((D))
+  D --- E((E))
+  E --- F((F))
+```
+- Good for ordered entities (years, journals)
+- Less informative for community detection
+:::
+:::
+
+---
+
+## Making dense graphs legible
+
+- **Edge filtering:** keep edges with weight ≥ *k*
+- **Node filtering:** top *N* by degree/PageRank per community
+- **Facet by community:** separate mini-views rather than one hairball
+- **Legends:** explicit mapping of size/color/width
+
+
+---
+
+## Common pitfalls & remedies
+
+| Pitfall | Symptom | Remedy |
+|---|---|---|
+| Too dense | Hairball | Threshold weights; facet by community |
+| Label clutter | Overlapping text | Label only top nodes; add hover in interactive tools |
+| Misleading distances | "Far" nodes read as unrelated | Explain layout limits; show adjacency/matrix view |
+| Over-interpretation | Spurious clusters | Cross-check with keywords, venues, time |
+
+---
