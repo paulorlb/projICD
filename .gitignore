@@ -1,4 +1,4 @@
 *.env
 /data
-/notebooks/teaching_materials
+/notebooks/teaching_material
 /logs
