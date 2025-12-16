@@ -49,3 +49,7 @@ def spacy_tokenize_abstract(text: str, allowed_pos=("NOUN", "PROPN", "ADJ")) -> 
         tokens.append(lemma)
 
     return tokens
+
+
+def spacy_analyzer(text: str):
+    return spacy_tokenize_abstract(text)

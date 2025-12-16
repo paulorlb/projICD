@@ -44,6 +44,7 @@ from scripts.auxDashboard.utils_dashboard import (
     load_topic_comparison,
     load_semantic_search_data,
     semantic_search,
+    spacy_analyzer,
 )
 
 

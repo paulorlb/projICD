@@ -18,7 +18,9 @@ def find_project_root(marker="README.md"):
     raise FileNotFoundError(f"Marker '{marker}' not found in any parent directory.")
 
 project_root = find_project_root()
-sys.path.append(str(project_root)) 
+sys.path.append(str(project_root))
+
+from scripts.auxTools.spacy_preprocess import spacy_tokenize_abstract
 
 
 BASE_DIR = project_root
@@ -83,3 +85,6 @@ def semantic_search(query_text, model_pipeline, X, doc_index, top_n=10):
     results = doc_index.iloc[top_idx].copy()
     results["similarity"] = sims[top_idx]
     return results
+
+def spacy_analyzer(text: str):
+    return spacy_tokenize_abstract(text)
